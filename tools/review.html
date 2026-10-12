@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Photo Review</title>
+  <style>
+    :root { --bg: #101217; --panel: #191c23; --text: #eef0f4; --muted: #9aa2b1; --accent: #ffb547; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 13px/1.4 system-ui, sans-serif; padding: 16px; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    h2 { font-size: 16px; margin: 24px 0 8px; color: var(--accent); }
+    p { color: var(--muted); margin: 0 0 12px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+    figure { margin: 0; background: var(--panel); border-radius: 8px; overflow: hidden; }
+    img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; }
+    figcaption { padding: 6px 8px; display: grid; gap: 2px; }
+    figcaption b { color: var(--accent); }
+    figcaption span { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  </style>
+</head>
+<body>
+  <h1>Photo review</h1>
+  <p>Every photo in data/photos.js by level. To move or drop a photo, put its id in tools/photo-levels.json and rebuild.</p>
+  <div id="out"></div>
+  <script src="../data/photos.js"></script>
+  <script>
+    const fmtT = (t) => (t >= 0.3 ? Math.round(t * 10) / 10 + "s" : "1/" + Math.round(1 / t));
+    const out = document.getElementById("out");
+    const params = new URLSearchParams(location.search);
+    const only = params.get("level"); // e.g. review.html?level=beginner
+    const mineOnly = params.has("mine"); // review.html?mine shows only my own photos
+    for (const level of ["beginner", "intermediate", "expert"].filter((l) => !only || l === only)) {
+      const list = window.PHOTOS.filter((p) => p.level === level && (!mineOnly || p.mine));
+      const h = document.createElement("h2");
+      h.textContent = `${level} (${list.length})`;
+      const grid = document.createElement("div");
+      grid.className = "grid";
+      for (const p of list) {
+        const f = document.createElement("figure");
+        const img = document.createElement("img");
+        img.loading = "lazy";
+        img.referrerPolicy = "no-referrer";
+        img.src = p.mine ? "../" + p.image : p.image.replace("/1280px-", "/330px-");
+        const cap = document.createElement("figcaption");
+        const b = document.createElement("b");
+        b.textContent = `${p.id} · f/${p.aperture} · ${fmtT(p.shutter)} · ISO ${p.iso}`;
+        const s = document.createElement("span");
+        s.textContent = p.title;
+        const c = document.createElement("span");
+        c.textContent = p.camera || "no camera info";
+        cap.append(b, s, c);
+        f.append(img, cap);
+        grid.append(f);
+      }
+      out.append(h, grid);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shutter Sense</title>
+  <meta name="description" content="Guess the aperture, shutter speed and ISO behind real photos.">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main id="app">
+
+    <!-- HOME -->
+    <section id="screen-home" class="screen active" aria-labelledby="title">
+      <header class="hero">
+        <img class="logo" src="icons/icon.svg" alt="" width="72" height="72">
+        <h1 id="title">Shutter<br>Sense</h1>
+        <p class="tagline">Look at the shot. Guess the <b>aperture</b>, <b>shutter speed</b> and <b>ISO</b>.</p>
+      </header>
+
+      <div class="levels">
+        <button class="level-card" data-level="beginner">
+          <span class="level-tag">Level 1 · Beginner</span>
+          <span class="level-name">Textbook Shots</span>
+          <span class="level-desc">Light trails, silky waterfalls, blurry backgrounds, frozen action: the clues are obvious. You get a scene hint, and scoring is forgiving.</span>
+          <span class="level-best"><span data-count="beginner"></span> photos · <span data-best="beginner"></span></span>
+        </button>
+
+        <button class="level-card" data-level="intermediate">
+          <span class="level-tag">Level 2 · Intermediate</span>
+          <span class="level-name">Everyday Shots</span>
+          <span class="level-desc">Ordinary camera photos where the settings are less obvious. A hint is there if you need it.</span>
+          <span class="level-best"><span data-count="intermediate"></span> photos · <span data-best="intermediate"></span></span>
+        </button>
+
+        <button class="level-card" data-level="expert">
+          <span class="level-tag">Level 3 · Expert</span>
+          <span class="level-name">Tricky Shots</span>
+          <span class="level-desc">Phones, compact cameras and unusual settings. Only lens info as a hint, and scoring is strict.</span>
+          <span class="level-best"><span data-count="expert"></span> photos · <span data-best="expert"></span></span>
+        </button>
+      </div>
+
+      <details class="howto">
+        <summary>How to play</summary>
+        <p>Each round has <b>5 photos</b>. For each one, set the three dials to what you think the photographer used, then lock in.</p>
+        <ul>
+          <li><b>Aperture (f-stop)</b>: small numbers like f/1.4 make a blurry background with round bokeh. Big numbers like f/16 keep everything sharp.</li>
+          <li><b>Shutter speed</b>: fast speeds like 1/2000 freeze motion. Slow speeds like 2s turn moving water and car lights into streaks.</li>
+          <li><b>ISO</b>: low ISO (100) is clean. High ISO (6400+) adds speckled grain, mostly in the shadows.</li>
+          <li>All three together decide how <b>bright</b> the photo is, so think about how much light was in the scene.</li>
+        </ul>
+        <p>You score up to <b>100 points per setting</b>. You lose points for every stop you're off. You get zero at 4 stops off on Beginner, 3 on Intermediate and 2½ on Expert.</p>
+        <p>Every photo is a real photo: public-domain or CC0 shots from Wikimedia Commons, mixed with my own photos. The answers come from the camera's own EXIF data. After each guess you see who took the photo, with a link to the source for Commons photos.</p>
+        <p>Tap a photo to see it full screen.</p>
+      </details>
+
+      <footer class="foot">
+        <span>Photos: <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a> (public domain / CC0) and Ege Kıyıcı.</span>
+      </footer>
+    </section>
+
+    <!-- GAME -->
+    <section id="screen-game" class="screen" aria-label="Game">
+      <div class="topbar">
+        <button class="icon-btn" id="btn-quit" aria-label="Back to menu">✕</button>
+        <div class="progress">
+          <span id="level-label">Beginner</span>
+          <span id="round-label">1 / 5</span>
+        </div>
+        <div class="score-pill"><span id="score">0</span> pts</div>
+      </div>
+
+      <div class="frame" id="frame" role="button" tabindex="0" aria-label="Photo. Tap to view full screen.">
+        <img id="photo" alt="" referrerpolicy="no-referrer" hidden>
+        <div class="loader" id="loader" hidden><span></span></div>
+        <span class="zoom-hint" aria-hidden="true">⤢</span>
+      </div>
+
+      <div class="hint-row">
+        <span id="scene-chip" class="chip"></span>
+        <button id="btn-hint" class="link-btn" hidden>Show lens info</button>
+      </div>
+
+      <div id="guess-panel">
+        <div id="dials"></div>
+        <button class="primary" id="btn-lock">Lock in guess</button>
+      </div>
+
+      <div id="reveal-panel" hidden>
+        <div class="results" id="results"></div>
+        <ul class="tips" id="tips"></ul>
+        <div class="credit" id="credit" hidden></div>
+        <button class="primary" id="btn-next">Next photo</button>
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section id="screen-summary" class="screen" aria-labelledby="sum-title">
+      <h2 id="sum-title" class="sum-title">Round complete</h2>
+      <div class="sum-score"><span id="sum-points">0</span><small> / <span id="sum-max">1500</span></small></div>
+      <p class="sum-rank" id="sum-rank"></p>
+      <p class="sum-best" id="sum-best" hidden>★ New best score!</p>
+      <ol class="sum-list" id="sum-list"></ol>
+      <div class="sum-actions">
+        <button class="primary" id="btn-again">Play again</button>
+        <button class="secondary" id="btn-home">Menu</button>
+      </div>
+    </section>
+  </main>
+
+  <noscript><p class="noscript">Shutter Sense needs JavaScript to run.</p></noscript>
+
+  <script src="data/photos.js"></script>
+  <script src="js/camera.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>

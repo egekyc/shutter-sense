@@ -1,0 +1,26 @@
+{
+  "_help": "Commons page ids. 'exclude' removes a photo (paintings, statues, products, near-duplicates, misleading EXIF). The level lists override the automatic level from build-photo-data.mjs.",
+  "exclude": [
+    14826596, 14979516, 14979584, 59447, 59449, 3386070, 1405020, 2375072, 151142199,
+    114822976, 693023, 62049323, 14580220, 121468345, 142916200, 5305495, 5739450, 1819306,
+    13303789, 3181543, 10113934, 11192550, 46083797, 7580932, 46082504, 12218099, 13529574,
+    14841685, 18942829, 401363, 1005532, 19445379, 19744214, 19687091, 1773445, 18108102,
+    5676211, 11107787, 11108587, 3966453, 55040326, 171280265, 171280282, 171280338, 76537741,
+    102032465, 62239783, 65975572, 65975573, 50619599, 75867983, 7785334, 8979659, 82944204,
+    7160351, 150576640
+  ],
+  "_excludeMine": "My photos (folder/file) that must never be used. event-5.jpg is an exact copy of port-3.jpg, which is off-limits.",
+  "excludeMine": ["event/event-5.jpg"],
+  "beginner": [
+    "mine-animal-12", "mine-animal-18", "mine-event-17", "mine-event-18", "mine-event-19",
+    "mine-landscape-8", "mine-landscape-10"
+  ],
+  "intermediate": [
+    49405400, 40454709, 40459774, 11160423, 99772647, 20885007, 15268852,
+    "mine-event-21", "mine-street-6", "mine-street-8"
+  ],
+  "expert": [
+    "mine-animal-11", "mine-animal-15", "mine-event-9", "mine-event-12", "mine-event-13",
+    "mine-event-14", "mine-event-16", "mine-portrait-9", "mine-landscape-7", "mine-street-9"
+  ]
+}
